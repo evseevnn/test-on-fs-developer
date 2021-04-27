@@ -1,0 +1,8 @@
+.nav-link.active {
+  color: #fff;
+}
+
+.book-card {
+  width: 18rem;
+  height: 155px;
+}

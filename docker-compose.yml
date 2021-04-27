@@ -1,0 +1,40 @@
+version: "3"
+services:
+  mongodb:
+    image: mongo:3.6.1
+    container_name: mongodb
+    volumes:
+      - mongodb:/data/db
+      - mongodb_config:/data/configdb
+    ports:
+      - 27017:27017
+    command: mongod
+
+  mongo-seed:
+    build: ./mongo-seed
+    links:
+      - mongodb
+
+  backend:
+    build: ./backend
+    ports:
+      - "4000:4000"
+    links:
+      - mongodb
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017/library
+      - PORT=4000
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    # links:
+    # - backend
+    environment:
+      - GRAPHQL_URL=http://backend:4000/graphql
+      - PORT=3000
+
+volumes:
+  mongodb:
+  mongodb_config:
